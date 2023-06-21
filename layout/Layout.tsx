@@ -6,16 +6,16 @@ import cn from 'classnames';
 import styles from './Layout.module.css';
 import { FunctionComponent } from 'react';
 
-export const Layout = ({ children }: LayoutProps): JSX.Element => {
+const Layout = ({ children }: LayoutProps): JSX.Element => {
   return (
-    <>
-      <Header />
-      <div>
-        <Sidebar />
+    <div className={styles.wrapper}>
+      <Header className={styles.header} />
+      <Sidebar className={styles.sidebar} />
+      <div className={styles.body}>
         <div>{children}</div>
       </div>
-      <Footer />
-    </>
+      <Footer className={styles.footer} />
+    </div>
   );
 };
 

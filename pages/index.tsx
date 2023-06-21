@@ -1,10 +1,12 @@
-import { Layout } from '@/layout/Layout';
+import { GetStaticProps } from 'next';
 import { Button, Tag, Htag, P, Rating } from '@/components';
 import { withLayout } from '@/layout/Layout';
+import { MenuItem } from '@/interfaces/menu.inteface';
+import axios from 'axios';
 
-function Home(): JSX.Element {
+function Home({ menu }: HomeProps): JSX.Element {
   return (
-    <Layout>
+    <>
       <Htag tag="h1">Текст</Htag>
       <Button appearance="primary" arrow="right">
         Купить
@@ -28,8 +30,34 @@ function Home(): JSX.Element {
         bay
       </Tag>
       <Rating rating={4} />
-    </Layout>
+      <ul>
+        {menu.map((m) => (
+          <li key={m._id.secondCategory}>{m._id.secondCategory}</li>
+        ))}
+      </ul>
+    </>
   );
 }
 
 export default withLayout(Home);
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const firstCategory = 0;
+  const { data: menu } = await axios.post<MenuItem[]>(
+    process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/find',
+    {
+      firstCategory,
+    }
+  );
+  return {
+    props: {
+      menu,
+      firstCategory,
+    },
+  };
+};
+
+interface HomeProps extends Record<string, unknown> {
+  menu: MenuItem[];
+  firstCategory: number;
+}
